@@ -47,7 +47,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var widthPerCell = width / 5;
 
-    print(widthPerCell);
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                padding: EdgeInsets.only(bottom: width, left: 16, right: 16),
+                child: buildTopTextWidgets(context),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: buildBottomLineBar(),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: buildKeyPadWidget(width, widthPerCell),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column buildTopTextWidgets(BuildContext context) {
+    return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: buildBracketWidget(context, '['),
+                      ),
+                      Expanded(
+                        child: buildBracketWidget(context, ']'),
+                      ),
+                    ],
+                  )
+                ],
+              );
+  }
+
+  Container buildKeyPadWidget(double width, double widthPerCell) {
     var _staggeredTiles = <StaggeredTile>[
       StaggeredTile.count(1, 1),
       StaggeredTile.count(1, 1),
@@ -105,64 +151,28 @@ class _MyHomePageState extends State<MyHomePage> {
           width: widthPerCell,
           height: widthPerCell),
     ];
+    return Container(
+      margin: EdgeInsets.only(bottom: 44),
+      height: width / 5 * 4 + 8,
+      width: width,
+      alignment: Alignment.center,
+      child: StaggeredGridView.count(
+        crossAxisCount: 5,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        scrollDirection: Axis.vertical,
+        staggeredTiles: _staggeredTiles,
+        children: _children,
+      ),
+    );
+  }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                padding: EdgeInsets.only(bottom: width, left: 16, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: buildBracketWidget(context, '['),
-                        ),
-                        Expanded(
-                          child: buildBracketWidget(context, ']'),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 24),
-                child: CustomPaint(
-                  size: Size(110, 4),
-                  painter: BarViewPainer(),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: EdgeInsets.only(bottom: 44),
-                height: width / 5 * 4 + 8,
-                width: width,
-                alignment: Alignment.center,
-                child: StaggeredGridView.count(
-                  crossAxisCount: 5,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  scrollDirection: Axis.vertical,
-                  staggeredTiles: _staggeredTiles,
-                  children: _children,
-                ),
-              ),
-            ),
-          ],
-        ),
+  Padding buildBottomLineBar() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: 24),
+      child: CustomPaint(
+        size: Size(110, 4),
+        painter: BarViewPainer(),
       ),
     );
   }
