@@ -11,7 +11,13 @@ class TopSectionWidget extends StatefulWidget {
 
 class _TopSectionWidgetState extends State<TopSectionWidget> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -34,15 +40,30 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
         buildBracketWidgets(context),
       ],
     );
-    ;
   }
 
+  var _models = <CalculatedRowModel>[
+    CalculatedRowModel("100", 0),
+    CalculatedRowModel("210", 1),
+    CalculatedRowModel("525", 2),
+  ];
+
   List<Widget> buildCalculatedRowList() {
-    return <Widget>[
-      CalculatedRowWidget("100"),
-      CalculatedRowWidget("210"),
-      CalculatedRowWidget("525"),
-    ];
+    return _models.map((item) {
+      return CalculatedRowWidget(
+        item.amount,
+        item.id,
+        onRemoved: onCalculatedWidgetRemoved,
+      );
+    }).toList();
+  }
+
+  void onCalculatedWidgetRemoved(int index) {
+    setState(() {
+      _models = _models.where((item) {
+        return item.id != index;
+      }).toList();
+    });
   }
 
   Widget buildExpenseHeading(String text) {
@@ -99,4 +120,10 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
       ],
     );
   }
+}
+
+class CalculatedRowModel {
+  String amount;
+  int id;
+  CalculatedRowModel(this.amount, this.id);
 }
