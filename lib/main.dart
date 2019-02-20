@@ -1,14 +1,5 @@
-import 'package:calc_with_checklist/painter/bar_view_painter.dart';
-import 'package:calc_with_checklist/widgets/bracket_button_widget.dart';
-import 'package:calc_with_checklist/widgets/calculated_row_widget.dart';
-import 'package:calc_with_checklist/widgets/calculator_button_widget.dart';
-import 'package:calc_with_checklist/widgets/calculator_function_button_widget.dart';
 import 'package:calc_with_checklist/widgets/calculator_page.dart';
-import 'package:calc_with_checklist/widgets/extended_functional_button_widget.dart';
-import 'package:calc_with_checklist/widgets/keypad_widget.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 void main() => runApp(MyApp());
 
