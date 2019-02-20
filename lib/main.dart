@@ -43,6 +43,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width - 48;
+
+    var widthPerCell = width / 5;
+
+    print(widthPerCell);
     var _staggeredTiles = <StaggeredTile>[
       StaggeredTile.count(1, 1),
       StaggeredTile.count(1, 1),
@@ -64,40 +69,71 @@ class _MyHomePageState extends State<MyHomePage> {
       StaggeredTile.count(2, 1),
     ];
     var _children = <Widget>[
-      CalculatorButton("7"),
-      CalculatorButton("8"),
-      CalculatorButton("9"),
-      CalculatorFunctionalButton("/"),
+      CalculatorButton("7", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("8", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("9", width: widthPerCell, height: widthPerCell),
+      CalculatorFunctionalButton("/",
+          width: widthPerCell, height: widthPerCell),
       Transform.rotate(
         angle: pi / 4,
-        child: CalculatorFunctionalButton("+"),
+        child: CalculatorFunctionalButton("+",
+            width: widthPerCell, height: widthPerCell),
       ),
-      CalculatorButton("4"),
-      CalculatorButton("5"),
-      CalculatorButton("6"),
+      CalculatorButton("4", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("5", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("6", width: widthPerCell, height: widthPerCell),
       ExtendedFunctionalButton(
         "+",
         textColor: Theme.of(context).primaryColor,
         backgroundColor: Theme.of(context).accentColor,
+        width: widthPerCell,
+        height: widthPerCell,
       ),
-      CalculatorFunctionalButton("-"),
-      CalculatorButton("1"),
-      CalculatorButton("2"),
-      CalculatorButton("3"),
-      CalculatorFunctionalButton("%"),
-      CalculatorButton("0"),
-      CalculatorButton("."),
-      CalculatorButton(""),
-      ExtendedFunctionalButton(
-        "=",
-        textColor: Theme.of(context).primaryColor,
-        backgroundColor: Color(0xFFD9F2B4),
-      ),
+      CalculatorFunctionalButton("-",
+          width: widthPerCell, height: widthPerCell),
+      CalculatorButton("1", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("2", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("3", width: widthPerCell, height: widthPerCell),
+      CalculatorFunctionalButton("%",
+          width: widthPerCell, height: widthPerCell),
+      CalculatorButton("0", width: widthPerCell, height: widthPerCell),
+      CalculatorButton(".", width: widthPerCell, height: widthPerCell),
+      CalculatorButton("", width: widthPerCell, height: widthPerCell),
+      ExtendedFunctionalButton("=",
+          textColor: Theme.of(context).primaryColor,
+          backgroundColor: Color(0xFFD9F2B4),
+          width: widthPerCell,
+          height: widthPerCell),
     ];
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                padding: EdgeInsets.only(bottom: width, left: 16, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          child: buildBracketWidget(context, '['),
+                        ),
+                        Expanded(
+                          child: buildBracketWidget(context, ']'),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -112,8 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 margin: EdgeInsets.only(bottom: 44),
-                height: 230,
-                width: 270,
+                height: width / 5 * 4 + 8,
+                width: width,
                 alignment: Alignment.center,
                 child: StaggeredGridView.count(
                   crossAxisCount: 5,
@@ -126,6 +162,38 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildBracketWidget(BuildContext context, String text) {
+    return Container(
+      margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+      child: Material(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(4.0),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4.0),
+          onTap: () {},
+          child: Container(
+            padding: EdgeInsets.all(8),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: Color(0xFF5D656B),
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                )),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontSize: 18,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -156,11 +224,15 @@ class CalculatorButton extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final Color highlightColor;
+  final double height;
+  final double width;
   CalculatorButton(
     this.text, {
     this.textColor = Colors.white,
     this.backgroundColor = const Color(0xFF474C50),
     this.highlightColor = const Color(0x66BCBCBC),
+    this.height = 50,
+    this.width = 50,
   });
   @override
   Widget build(BuildContext context) {
@@ -169,11 +241,14 @@ class CalculatorButton extends StatelessWidget {
       type: MaterialType.circle,
       child: InkWell(
         onTap: () {},
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(width / 2),
         highlightColor: highlightColor,
         child: Container(
-          height: 50,
-          width: 50,
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+          ),
           alignment: Alignment.center,
           child: Text(
             text,
@@ -191,7 +266,13 @@ class CalculatorButton extends StatelessWidget {
 
 class CalculatorFunctionalButton extends StatelessWidget {
   final String text;
-  CalculatorFunctionalButton(this.text);
+  final double height;
+  final double width;
+  CalculatorFunctionalButton(
+    this.text, {
+    this.height = 50,
+    this.width = 50,
+  });
   @override
   Widget build(BuildContext context) {
     return CalculatorButton(
@@ -199,6 +280,8 @@ class CalculatorFunctionalButton extends StatelessWidget {
       textColor: Theme.of(context).primaryColor,
       backgroundColor: Theme.of(context).accentColor,
       highlightColor: Theme.of(context).primaryColor.withAlpha(40),
+      height: height,
+      width: width,
     );
   }
 }
@@ -208,24 +291,28 @@ class ExtendedFunctionalButton extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final Color highlightColor;
+  final double height;
+  final double width;
   ExtendedFunctionalButton(
     this.text, {
     this.textColor = Colors.white,
     this.backgroundColor = const Color(0xFF474C50),
     this.highlightColor = const Color(0x66BCBCBC),
+    this.height = 50,
+    this.width = 50,
   });
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: BorderRadius.all(Radius.circular(25)),
+      borderRadius: BorderRadius.all(Radius.circular(width / 2)),
       color: backgroundColor,
       child: InkWell(
         onTap: () {},
-        borderRadius: BorderRadius.all(Radius.circular(25)),
+        borderRadius: BorderRadius.all(Radius.circular(width / 2)),
         highlightColor: highlightColor,
         child: Container(
-          height: 50,
-          width: 50,
+          height: height,
+          width: width,
           alignment: Alignment.center,
           child: Text(
             text,
