@@ -34,17 +34,15 @@ class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
     );
     _animation = CurvedAnimation(
       parent: _opacityController,
-      curve: Curves.easeInOut,
+      curve: Curves.easeIn,
     )
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          if (onRemoved != null) {
-            onRemoved(this.index);
-          }
+        if (status == AnimationStatus.completed && onRemoved != null) {
+          onRemoved(this.index);
         }
       })
       ..addListener(() {
-        setState(() {});
+        // setState(() {});
       });
   }
 
@@ -56,39 +54,42 @@ class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return AnimatedBuilder(
       animation: _animation,
       builder: (_, widget) {
         return Transform.translate(
-          offset: Offset(_animation.value * width, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 32,
-                width: 32,
-                child: IconButton(
-                  tooltip: "Delete",
-                  icon: Icon(Icons.close),
-                  color: Color(0xFFB8B8B8),
-                  onPressed: () {
-                    _opacityController.forward();
-                  },
-                  iconSize: 20,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
+          offset: Offset(0, _animation.value * 40),
+          child: Opacity(
+            opacity: (1 - _animation.value),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: IconButton(
+                    tooltip: "Delete",
+                    icon: Icon(Icons.close),
+                    color: Color(0xFFB8B8B8),
+                    onPressed: () {
+                      _opacityController.forward();
+                    },
+                    iconSize: 20,
                   ),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },

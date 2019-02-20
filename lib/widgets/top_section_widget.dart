@@ -17,7 +17,6 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -25,7 +24,7 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
         buildExpenseHeading("MY TRIP TO SPAIN"),
         buildExpenseAmountWidget("US\$", "540K"),
         Container(
-          width: 20,
+          width: 120,
           height: 2,
           margin: EdgeInsets.only(right: 2),
           color: Theme.of(context).accentColor,
@@ -59,6 +58,7 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
   }
 
   void onCalculatedWidgetRemoved(int index) {
+    print(index);
     setState(() {
       _models = _models.where((item) {
         return item.id != index;
