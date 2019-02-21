@@ -10,17 +10,12 @@ class CalculatedRowWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _CalculatedRowWidgetState(text, index, onRemoved: onRemoved);
+    return _CalculatedRowWidgetState();
   }
 }
 
 class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
     with TickerProviderStateMixin {
-  final int index;
-  final IndexedCallback onRemoved;
-  final String text;
-  _CalculatedRowWidgetState(this.text, this.index, {this.onRemoved});
-
   Animation<double> _animation;
   AnimationController _opacityController;
   @override
@@ -37,12 +32,14 @@ class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
       curve: Curves.easeIn,
     )
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && onRemoved != null) {
-          onRemoved(this.index);
+        debugPrint("animation status updated ${status.toString()}");
+        if (status == AnimationStatus.completed && widget.onRemoved != null) {
+          widget.onRemoved(widget.index);
+          debugPrint("Remove animation completed");
         }
       })
       ..addListener(() {
-        // setState(() {});
+        setState(() {});
       });
   }
 
@@ -54,10 +51,9 @@ class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return AnimatedBuilder(
       animation: _animation,
-      builder: (_, widget) {
+      builder: (_, _widget) {
         return Transform.translate(
           offset: Offset(0, _animation.value * 40),
           child: Opacity(
@@ -80,7 +76,7 @@ class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
                 ),
                 Expanded(
                   child: Text(
-                    text,
+                    widget.text,
                     textAlign: TextAlign.end,
                     style: TextStyle(
                       fontSize: 16,
