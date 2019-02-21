@@ -1,5 +1,6 @@
 import 'package:calc_with_checklist/widgets/calculator_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,6 +27,20 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: CalculatorPage(),
+      builder: (context, child) {
+        return ScrollConfiguration(
+          behavior: NoOverScrollGlowBehavior(),
+          child: child,
+        );
+      },
     );
+  }
+}
+
+class NoOverScrollGlowBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
