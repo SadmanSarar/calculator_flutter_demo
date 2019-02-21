@@ -1,6 +1,6 @@
 import 'package:calc_with_checklist/widgets/calculator_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 
 void main() => runApp(MyApp());
 

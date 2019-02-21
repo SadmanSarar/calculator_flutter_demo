@@ -1,11 +1,16 @@
 import 'package:calc_with_checklist/widgets/top_section_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:calc_with_checklist/painter/bar_view_painter.dart';
-import 'package:calc_with_checklist/widgets/bracket_button_widget.dart';
-import 'package:calc_with_checklist/widgets/calculated_row_widget.dart';
 import 'package:calc_with_checklist/widgets/keypad_widget.dart';
 
-class CalculatorPage extends StatelessWidget {
+class CalculatorPage extends StatefulWidget {
+  @override
+  _CalculatorPageState createState() => _CalculatorPageState();
+}
+
+class _CalculatorPageState extends State<CalculatorPage> {
+  var _editedAmount = "";
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 48;
@@ -20,7 +25,13 @@ class CalculatorPage extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Container(
                 padding: EdgeInsets.only(bottom: width, left: 24, right: 24),
-                child: TopSectionWidget(),
+                child: TopSectionWidget(
+                  expenseTitle: "Dummy Expense Title",
+                  currency: "US\$",
+                  expense: "320K",
+                  editAmount: _editedAmount,
+                  onButtonClicked: onButtonClicked,
+                ),
               ),
             ),
             Align(
@@ -29,12 +40,21 @@ class CalculatorPage extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: KeyPadWidget(width, widthPerCell),
+              child: KeyPadWidget(width, widthPerCell, onButtonClicked),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void onButtonClicked(String data) {
+    if (data == '=') {
+      return;
+    }
+    setState(() {
+      _editedAmount = _editedAmount + data;
+    });
   }
 
   Widget buildBottomLineBar() {

@@ -1,8 +1,10 @@
+import 'package:calc_with_checklist/widgets/calculator_button_widget.dart';
 import 'package:flutter/material.dart';
 
 class BracketButton extends StatelessWidget {
   final String text;
-  BracketButton(this.text);
+  final OnItemClicked<String> onButtonClicked;
+  BracketButton(this.text, this.onButtonClicked);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,11 @@ class BracketButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(4.0),
         child: InkWell(
           borderRadius: BorderRadius.circular(4.0),
-          onTap: () {},
+          onTap: () {
+            if (onButtonClicked != null) {
+              onButtonClicked(text);
+            }
+          },
           child: Container(
             padding: EdgeInsets.all(8),
             alignment: Alignment.center,

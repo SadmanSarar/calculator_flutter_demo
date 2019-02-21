@@ -1,8 +1,22 @@
 import 'package:calc_with_checklist/widgets/bracket_button_widget.dart';
 import 'package:calc_with_checklist/widgets/calculated_row_widget.dart';
+import 'package:calc_with_checklist/widgets/calculator_button_widget.dart';
 import 'package:flutter/material.dart';
 
 class TopSectionWidget extends StatefulWidget {
+  final String expenseTitle;
+  final String currency;
+  final String expense;
+  final String editAmount;
+  final OnItemClicked<String> onButtonClicked;
+
+  TopSectionWidget(
+      {this.expenseTitle,
+      this.currency,
+      this.expense,
+      this.editAmount,
+      this.onButtonClicked});
+
   @override
   _TopSectionWidgetState createState() {
     return _TopSectionWidgetState();
@@ -21,8 +35,8 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        buildExpenseHeading("MY TRIP TO SPAIN"),
-        buildExpenseAmountWidget("US\$", "540K"),
+        buildExpenseHeading(widget.expenseTitle),
+        buildExpenseAmountWidget(widget.currency, widget.expense),
         Container(
           width: 120,
           height: 2,
@@ -57,7 +71,7 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
     }).toList();
     widgets.addAll(items);
     var text = buildCalculatorEditTextWidget(
-      "[ 23 + 4 ]",
+      widget.editAmount,
     );
     widgets.add(text);
     return widgets;
@@ -67,11 +81,10 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
     return Padding(
         padding: EdgeInsets.only(top: 4, bottom: 4),
         child: Text(
-          text,
+          text.isEmpty ? "[+-*/%]" : text,
           style: TextStyle(
-            color: Colors.white,
+            color: text.isEmpty ? Colors.white.withAlpha(30) : Colors.white,
             fontSize: 28,
-            // fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.end,
         ));
@@ -132,14 +145,14 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Expanded(
-          child: BracketButton('['),
+          child: BracketButton('[', widget.onButtonClicked),
         ),
         SizedBox(
           height: 8.0,
           width: 8.0,
         ),
         Expanded(
-          child: BracketButton(']'),
+          child: BracketButton(']', widget.onButtonClicked),
         ),
       ],
     );
