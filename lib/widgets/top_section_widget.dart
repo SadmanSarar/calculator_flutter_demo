@@ -43,18 +43,38 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
 
   var _models = <CalculatedRowModel>[
     CalculatedRowModel("100", 0),
-    CalculatedRowModel("210", 1),
     CalculatedRowModel("525", 2),
   ];
 
   List<Widget> buildCalculatedRowList() {
-    return _models.map((item) {
+    List<Widget> widgets = <Widget>[];
+    var items = _models.map((item) {
       return CalculatedRowWidget(
         item.amount,
         item.id,
         onRemoved: onCalculatedWidgetRemoved,
       );
     }).toList();
+    widgets.addAll(items);
+    var text = buildCalculatorEditTextWidget(
+      "[ 23 + 4 ]",
+    );
+    widgets.add(text);
+    return widgets;
+  }
+
+  Padding buildCalculatorEditTextWidget(String text) {
+    return Padding(
+        padding: EdgeInsets.only(top: 4, bottom: 4),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            // fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.end,
+        ));
   }
 
   void onCalculatedWidgetRemoved(int index) {
