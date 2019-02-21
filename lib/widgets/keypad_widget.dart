@@ -10,6 +10,7 @@ class KeyPadWidget extends StatelessWidget {
   final double widthPerCell;
   final OnItemClicked<String> onButtonClicked;
   KeyPadWidget(this.width, this.widthPerCell, this.onButtonClicked);
+
   final _staggeredTiles = <StaggeredTile>[
     StaggeredTile.count(1, 1),
     StaggeredTile.count(1, 1),
@@ -31,104 +32,73 @@ class KeyPadWidget extends StatelessWidget {
     StaggeredTile.count(2, 1),
   ];
 
+  final List<ButtonData> buttonDatas = [
+    ButtonData("7"),
+    ButtonData("8"),
+    ButtonData("9"),
+    ButtonData("/", type: ButtonDataType.CalculatorFunctionalButton),
+    ButtonData("*", type: ButtonDataType.TransformedCalculatorFunctionalButton),
+    ButtonData("4"),
+    ButtonData("5"),
+    ButtonData("6"),
+    ButtonData("+", type: ButtonDataType.ExtendedFunctionalButton),
+    ButtonData("-", type: ButtonDataType.CalculatorFunctionalButton),
+    ButtonData("1"),
+    ButtonData("2"),
+    ButtonData("3"),
+    ButtonData("%", type: ButtonDataType.CalculatorFunctionalButton),
+    ButtonData("0"),
+    ButtonData("."),
+    ButtonData("Del"),
+    ButtonData("=", type: ButtonDataType.ExtendedFunctionalButton),
+  ];
+
   List<Widget> buildKeyPadItems(BuildContext context) {
-    return <Widget>[
-      CalculatorButton(
-        "7",
-        width: widthPerCell,
-        height: widthPerCell,
-        clickListerer: onButtonClicked,
-      ),
-      CalculatorButton("8",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton("9",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorFunctionalButton(
-        "/",
-        width: widthPerCell,
-        height: widthPerCell,
-        clickListerer: onButtonClicked,
-      ),
-      Transform.rotate(
-        angle: pi / 4,
-        child: CalculatorFunctionalButton(
-          "+",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: (text) {
-            onButtonClicked("*");
-          },
-        ),
-      ),
-      CalculatorButton("4",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton("5",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton("6",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      ExtendedFunctionalButton(
-        "+",
-        textColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).accentColor,
-        width: widthPerCell,
-        height: widthPerCell,
-        clickListerer: onButtonClicked,
-      ),
-      CalculatorFunctionalButton(
-        "-",
-        width: widthPerCell,
-        height: widthPerCell,
-        clickListerer: onButtonClicked,
-      ),
-      CalculatorButton("1",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton("2",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton("3",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorFunctionalButton("%",
-          width: widthPerCell, height: widthPerCell),
-      CalculatorButton("0",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton(".",
-          width: widthPerCell,
-          height: widthPerCell,
-          clickListerer: onButtonClicked),
-      CalculatorButton("Del",
-          width: widthPerCell,
-          height: widthPerCell,
-          isActive: true, clickListerer: (text) {
-        if (onButtonClicked != null) {
-          onButtonClicked('<');
-        }
-      }),
-      ExtendedFunctionalButton(
-        "=",
-        textColor: Theme.of(context).primaryColor,
-        backgroundColor: Color(0xFFD9F2B4),
-        width: widthPerCell,
-        height: widthPerCell,
-        clickListerer: onButtonClicked,
-      ),
-    ];
+    return buttonDatas.map((item) {
+      switch (item.type) {
+        case ButtonDataType.CalculatorFunctionalButton:
+          return CalculatorFunctionalButton(
+            item.text,
+            width: widthPerCell,
+            height: widthPerCell,
+            clickListerer: onButtonClicked,
+          );
+          break;
+        case ButtonDataType.TransformedCalculatorFunctionalButton:
+          return Transform.rotate(
+            angle: pi / 4,
+            child: CalculatorFunctionalButton(
+              item.text == '*' ? '+' : item.text,
+              width: widthPerCell,
+              height: widthPerCell,
+              clickListerer: (text) {
+                onButtonClicked(item.text == '+' ? '*' : item.text);
+              },
+            ),
+          );
+
+          break;
+        case ButtonDataType.ExtendedFunctionalButton:
+          return ExtendedFunctionalButton(
+            item.text,
+            textColor: Theme.of(context).primaryColor,
+            backgroundColor: item.text == '='
+                ? Color(0xFFD9F2B4)
+                : Theme.of(context).accentColor,
+            width: widthPerCell,
+            height: widthPerCell,
+            clickListerer: onButtonClicked,
+          );
+          break;
+        default:
+          return CalculatorButton(
+            item.text,
+            width: widthPerCell,
+            height: widthPerCell,
+            clickListerer: onButtonClicked,
+          );
+      }
+    }).toList();
   }
 
   @override
@@ -149,4 +119,17 @@ class KeyPadWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class ButtonData {
+  final String text;
+  final ButtonDataType type;
+  ButtonData(this.text, {this.type = ButtonDataType.CalculatorButton});
+}
+
+enum ButtonDataType {
+  CalculatorButton,
+  CalculatorFunctionalButton,
+  TransformedCalculatorFunctionalButton,
+  ExtendedFunctionalButton
 }

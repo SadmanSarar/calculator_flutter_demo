@@ -78,6 +78,7 @@ class TopSectionWidget extends StatelessWidget {
       );
     }).toList();
     widgets.addAll(items);
+    debugPrint("Total widget built: ${items.length}");
     var text = buildCalculatorEditTextWidget(
       editAmount,
     );

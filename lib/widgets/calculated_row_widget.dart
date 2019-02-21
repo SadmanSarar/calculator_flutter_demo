@@ -36,10 +36,11 @@ class _CalculatedRowWidgetState extends State<CalculatedRowWidget>
         if (status == AnimationStatus.completed && widget.onRemoved != null) {
           widget.onRemoved(widget.index);
           debugPrint("Remove animation completed");
+          _opacityController.reset();
         }
       })
       ..addListener(() {
-        setState(() {});
+        // setState(() {});
       });
   }
 

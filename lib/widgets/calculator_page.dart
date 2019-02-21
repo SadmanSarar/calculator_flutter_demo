@@ -121,28 +121,43 @@ class _CalculatorPageState extends State<CalculatorPage> {
         return;
       }
     }
+    debugPrint(data);
 
+    if (data == '%') {
+      var ans = evaluateExpression();
+      ans = ans / 100;
+      completeCalculation(ans);
+      return;
+    }
     if (data == '=') {
-      Parser p = new Parser();
-      Expression exp = p.parse(_editedAmount);
-      ContextModel cm = new ContextModel();
-      double eval = exp.evaluate(EvaluationType.REAL, cm);
-      debugPrint(eval.toString());
-      setState(() {
-        _expense = eval.toStringAsFixed(2);
-        if (_expense.endsWith(".00")) {
-          _expense = _expense.substring(0, _expense.length - 3);
-        }
-        _models.add(
-          CalculatedRowModel(_expense, DateTime.now().millisecondsSinceEpoch),
-        );
-        _editedAmount = "";
-      });
+      double eval = evaluateExpression();
+      completeCalculation(eval);
       return;
     }
     setState(() {
       _editedAmount = _editedAmount + data;
     });
+  }
+
+  void completeCalculation(double eval) {
+    setState(() {
+      _expense = eval.toStringAsFixed(2);
+      if (_expense.endsWith(".00")) {
+        _expense = _expense.substring(0, _expense.length - 3);
+      }
+      _models.add(
+        CalculatedRowModel(_expense, DateTime.now().millisecondsSinceEpoch),
+      );
+      _editedAmount = "";
+    });
+  }
+
+  double evaluateExpression() {
+    Parser p = new Parser();
+    Expression exp = p.parse(_editedAmount);
+    ContextModel cm = new ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+    return eval;
   }
 
   void onCalculatedWidgetRemoved(int index) {
