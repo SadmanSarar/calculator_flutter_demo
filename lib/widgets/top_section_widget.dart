@@ -91,7 +91,6 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
   }
 
   void onCalculatedWidgetRemoved(int index) {
-    print(index);
     setState(() {
       _models = _models.where((item) {
         return item.id != index;
@@ -127,7 +126,7 @@ class _TopSectionWidgetState extends State<TopSectionWidget> {
           width: 8,
         ),
         Text(
-          amount,
+          amount.isEmpty ? "0.0" : amount,
           textAlign: TextAlign.end,
           style: TextStyle(
               color: Colors.white,

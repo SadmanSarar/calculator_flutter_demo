@@ -59,7 +59,9 @@ class KeyPadWidget extends StatelessWidget {
           "+",
           width: widthPerCell,
           height: widthPerCell,
-          clickListerer: onButtonClicked,
+          clickListerer: (text) {
+            onButtonClicked("*");
+          },
         ),
       ),
       CalculatorButton("4",
@@ -110,11 +112,14 @@ class KeyPadWidget extends StatelessWidget {
           width: widthPerCell,
           height: widthPerCell,
           clickListerer: onButtonClicked),
-      CalculatorButton("",
+      CalculatorButton("Del",
           width: widthPerCell,
           height: widthPerCell,
-          isActive: false,
-          clickListerer: onButtonClicked),
+          isActive: true, clickListerer: (text) {
+        if (onButtonClicked != null) {
+          onButtonClicked('<');
+        }
+      }),
       ExtendedFunctionalButton(
         "=",
         textColor: Theme.of(context).primaryColor,

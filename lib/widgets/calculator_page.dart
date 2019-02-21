@@ -2,6 +2,7 @@ import 'package:calc_with_checklist/widgets/top_section_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:calc_with_checklist/painter/bar_view_painter.dart';
 import 'package:calc_with_checklist/widgets/keypad_widget.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class CalculatorPage extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class CalculatorPage extends StatefulWidget {
 
 class _CalculatorPageState extends State<CalculatorPage> {
   var _editedAmount = "";
+  var _expense = "";
+  var _currency = "US\$";
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +30,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 padding: EdgeInsets.only(bottom: width, left: 24, right: 24),
                 child: TopSectionWidget(
                   expenseTitle: "Dummy Expense Title",
-                  currency: "US\$",
-                  expense: "320K",
+                  currency: _currency,
+                  expense: _expense,
                   editAmount: _editedAmount,
                   onButtonClicked: onButtonClicked,
                 ),
@@ -49,7 +52,35 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   void onButtonClicked(String data) {
+    if(data == '<'){
+      setState(() {
+        _editedAmount =_editedAmount.substring(0,_editedAmount.length-1);
+      });
+      return;
+     }
+    //Todo: input validation
+    if (_editedAmount.endsWith("+") ||
+        _editedAmount.endsWith("-") ||
+        _editedAmount.endsWith("*") ||
+        _editedAmount.endsWith("/")) {
+      if ((data == '+' || data == '-' || data == '*' || data == '/')) {
+        return;
+      }
+    }
+
     if (data == '=') {
+      Parser p = new Parser();
+      Expression exp = p.parse(_editedAmount);
+      ContextModel cm = new ContextModel();
+      double eval = exp.evaluate(EvaluationType.REAL, cm);
+      debugPrint(eval.toString());
+      setState(() {
+        _expense = eval.toStringAsFixed(2);
+        if(_expense.endsWith(".00")) {
+          _expense = _expense.substring(0,_expense.length-3);
+        }
+        _editedAmount = "";
+      });
       return;
     }
     setState(() {
