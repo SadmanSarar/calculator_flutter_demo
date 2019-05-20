@@ -106,7 +106,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   void onButtonClicked(String data) {
-    if (data == '<') {
+
+    if (data == '<' || data == 'Del') {
       setState(() {
         _editedAmount = _editedAmount.substring(0, _editedAmount.length - 1);
       });

@@ -41,6 +41,6 @@ class BracketButton extends StatelessWidget {
         ),
       ),
     );
-    ;
+
   }
 }

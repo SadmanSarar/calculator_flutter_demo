@@ -49,7 +49,7 @@ class TopSectionWidget extends StatelessWidget {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: buildCalculatedRowList(),
+                children: buildCalculatedRowList(constrains.maxHeight),
               );
             },
           ),
@@ -59,16 +59,17 @@ class TopSectionWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> buildCalculatedRowList() {
-    debugPrint(models.toString());
+  List<Widget> buildCalculatedRowList(double maxHeight) {
+    debugPrint("maxHeight: $maxHeight");
 
     List<Widget> widgets = <Widget>[];
     models.sort((a, b) {
       return a.id.compareTo(b.id);
     });
+    var rowCount = (maxHeight - 30) ~/ 32;
     var items = models
-        .getRange(
-            (models.length - 3) < 0 ? 0 : models.length - 3, models.length)
+        .getRange((models.length - rowCount) < 0 ? 0 : models.length - rowCount,
+            models.length)
         .map((item) {
       debugPrint(item.toString());
       return CalculatedRowWidget(
@@ -82,6 +83,7 @@ class TopSectionWidget extends StatelessWidget {
     var text = buildCalculatorEditTextWidget(
       editAmount,
     );
+    
     widgets.add(text);
     return widgets;
   }
@@ -96,6 +98,9 @@ class TopSectionWidget extends StatelessWidget {
             fontSize: 28,
           ),
           textAlign: TextAlign.end,
+          maxLines: 1,
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
         ));
   }
 
