@@ -1,6 +1,6 @@
 # Calculator
 
-A demo flutter project using calculator.
+A demo flutter project demonstrating a calculator app.
 
 ## Screen Shots
 
